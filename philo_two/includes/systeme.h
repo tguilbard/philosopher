@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:14:40 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/05/18 10:58:49 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/10/28 10:16:12 by tguilbar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ typedef struct	s_systeme
 	struct timeval	init_time;
 	pthread_t		*phil;
 	sem_t			*sem_fork;
-
+	sem_t			*sem_write;
 	int				nb_fork;
 	int				nb_phil;
 	int				time_to_die;

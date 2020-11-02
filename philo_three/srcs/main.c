@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/05/19 12:14:41 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/10/28 10:42:27 by tguilbar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ void	philosophe(t_philosophe *entities)
 	{
 		if (actual_time(*(entities->sys)) >= entities->death)
 		{
-			put_msg(*entities, "died\n");
+			put_msg(entities, "died\n");
 			exit(-1);
 		}
-		put_msg(*entities, "is thinking\n");
+		put_msg(entities, "is thinking\n");
 		take_fork(entities);
 		eating(entities);
 		sem_post(entities->sys->sem_fork);
 		sem_post(entities->sys->sem_fork);
-		sleeping(*entities);
+		sleeping(entities);
 	}
 	return ;
 }
@@ -42,13 +42,18 @@ int		init(t_systeme *sys, t_philosophe *entities, pid_t **pid)
 	sys->sem_fork = sem_open("count_fork", O_CREAT, 777, sys->nb_fork);
 	sem_unlink("count_goal");
 	sys->sem_goal = sem_open("count_goal", O_CREAT, 777, 0);
+	sem_unlink("secure_output");
+	sys->sem_write = sem_open("secure_output", O_CREAT, 777, 1);
 	if (*pid == NULL || sys->sem_fork == SEM_FAILED ||
-													sys->sem_goal == SEM_FAILED)
+													sys->sem_goal == SEM_FAILED || sys->sem_write == SEM_FAILED)
 	{
 		free(*pid);
 		sem_close(sys->sem_fork);
 		sem_unlink("count_fork");
+		sem_close(sys->sem_goal);
 		sem_unlink("count_goal");
+		sem_close(sys->sem_write);
+		sem_unlink("secure_output");
 		return (-1);
 	}
 	gettimeofday(&(sys->init_time), NULL);

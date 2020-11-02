@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 10:24:59 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/05/22 12:59:02 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/10/28 10:08:09 by tguilbar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,15 @@ char	*ft_strjoin(char *s1, char *s2, bool type)
 	return (result);
 }
 
-void	put_msg(t_philosophe entities, char *msg)
+void	put_msg(t_philosophe *entities, char *msg)
 {
 	char *result;
 
 	result = ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin(ft_itoa(actual_time(
-		*(entities.sys))), " ", false),ft_itoa(entities.id), true), " ", false),
+		*(entities->sys))), " ", false),ft_itoa(entities->id), true), " ", false),
 		msg, false);
+	pthread_mutex_lock(&entities->sys->mutex_write);
 	write(1, result, ft_strlen(result));
+	pthread_mutex_unlock(&entities->sys->mutex_write);
 	free(result);
 }

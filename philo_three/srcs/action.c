@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/05/22 13:03:40 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/10/28 10:33:36 by tguilbar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ extern bool g_end;
 
 void	eating(t_philosophe *entities)
 {
-	put_msg(*entities, "is eating\n");
+	put_msg(entities, "is eating\n");
 	usleep(entities->sys->time_to_eat * 1000);
 	entities->nb_feeded++;
 	if (entities->nb_feeded == entities->sys->goal)
@@ -26,20 +26,20 @@ void	eating(t_philosophe *entities)
 												+ entities->sys->time_to_die;
 }
 
-void	sleeping(t_philosophe entities)
+void	sleeping(t_philosophe *entities)
 {
 	int time;
 
-	time = actual_time(*(entities.sys));
+	time = actual_time(*(entities->sys));
 	put_msg(entities, "is sleeping\n");
-	if (entities.death - time < entities.sys->time_to_sleep)
+	if (entities->death - time < entities->sys->time_to_sleep)
 	{
-		usleep((entities.death - time) * 1000);
+		usleep((entities->death - time) * 1000);
 		put_msg(entities, "died\n");
 		exit(-1);
 	}
 	else
-		usleep(entities.sys->time_to_sleep * 1000);
+		usleep(entities->sys->time_to_sleep * 1000);
 }
 
 void	*goal_check(void *arg)
@@ -74,7 +74,7 @@ void	*death_check(void *arg)
 	{
 		if (actual_time(*(entities->sys)) >= entities->death && g_take == false)
 		{
-			put_msg(*entities, "died\n");
+			put_msg(entities, "died\n");
 			sem_post(entities->sys->sem_fork);
 			g_end = true;
 			return (NULL);
@@ -95,10 +95,10 @@ void	take_fork(t_philosophe *entities)
 	sem_wait(entities->sys->sem_fork);
 	if (g_end == true)
 		exit(-1);
-	put_msg(*entities, "has take a fork\n");
+	put_msg(entities, "has take a fork\n");
 	sem_wait(entities->sys->sem_fork);
 	if (g_end == true)
 		exit(-1);
 	g_take = true;
-	put_msg(*entities, "has take a fork\n");
+	put_msg(entities, "has take a fork\n");
 }

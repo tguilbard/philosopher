@@ -6,13 +6,13 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 12:11:16 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/05/22 13:00:32 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/10/28 10:54:46 by tguilbar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-extern bool g_end;
+extern bool	g_end;
 
 int		actual_time(t_systeme sys)
 {
@@ -44,6 +44,8 @@ void	destructor(t_philosophe *entities)
 	free(entities->sys->phil);
 	sem_close(entities->sys->sem_fork);
 	sem_unlink("count_fork");
+	sem_close(entities->sys->sem_write);
+	sem_unlink("secure_output");
 	free(entities);
 }
 

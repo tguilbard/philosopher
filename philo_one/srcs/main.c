@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/05/18 11:25:19 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/10/29 10:32:42 by tguilbar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,29 @@
 
 bool	g_end = false;
 int		g_goal = 0;
+bool	g_beat = 0;
 
 void	choice_fork(int right, int left, t_philosophe *entities)
 {
 	if (left < right)
 	{
+		while (g_beat % 2 != entities->id % 2 && g_end == false)
+			usleep(1000);
 		take_fork(left, entities);
 		if (g_end == true)
 			return ;
 		take_fork(right, entities);
+		g_beat = (entities->id % 2) ? 0 : 1;
 	}
 	else
 	{
+		while (g_beat % 2 != entities->id % 2 && g_end == false)
+			usleep(1000);
 		take_fork(right, entities);
 		if (g_end == true)
 			return ;
 		take_fork(left, entities);
+		g_beat = (entities->id % 2) ? 0 : 1;
 	}
 }
 
@@ -49,15 +56,15 @@ void	*philosophe(void *arg)
 		if (actual_time(*(entities->sys)) >= entities->death)
 		{
 			g_end = true;
-			put_msg(*entities, "died\n");
+			put_msg(entities, "died\n");
 			return (NULL);
 		}
-		put_msg(*entities, "is thinking\n");
+		put_msg(entities, "is thinking\n");
 		choice_fork(right, left, entities);
 		eating(entities);
 		pthread_mutex_unlock(&entities->sys->mutex_fork[left]);
 		pthread_mutex_unlock(&entities->sys->mutex_fork[right]);
-		sleeping(*entities);
+		sleeping(entities);
 	}
 	return (NULL);
 }
@@ -85,6 +92,7 @@ int		init(t_systeme *sys, t_philosophe **entities)
 	i = 1;
 	while (i <= sys->nb_fork)
 		pthread_mutex_init(&(sys->mutex_fork[i++ - 1]), NULL);
+	pthread_mutex_init(&sys->mutex_write, NULL);
 	gettimeofday(&(sys->init_time), NULL);
 	return (0);
 }

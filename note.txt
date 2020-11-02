@@ -1,0 +1,5 @@
+finish:
+- philo_three
+- philo_two
+todo:
+- patch bug philo_one

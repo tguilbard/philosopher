@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/05/22 12:57:05 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/10/28 11:13:14 by tguilbar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	eating(t_philosophe *entities)
 {
 	if (g_end == true)
 		return ;
-	put_msg(*entities, "is eating\n");
+	put_msg(entities, "is eating\n");
 	ft_sleep(entities->sys->time_to_eat);
 	entities->nb_feeded++;
 	if (entities->nb_feeded == entities->sys->goal)
@@ -28,22 +28,22 @@ void	eating(t_philosophe *entities)
 												+ entities->sys->time_to_die;
 }
 
-void	sleeping(t_philosophe entities)
+void	sleeping(t_philosophe *entities)
 {
 	int time;
 
 	if (g_end == true)
 		return ;
-	time = actual_time(*(entities.sys));
+	time = actual_time(*(entities->sys));
 	put_msg(entities, "is sleeping\n");
-	if (entities.death - time < entities.sys->time_to_sleep)
+	if (entities->death - time < entities->sys->time_to_sleep)
 	{
-		ft_sleep(entities.death - time);
+		ft_sleep(entities->death - time);
 		g_end = true;
 		put_msg(entities, "died\n");
 	}
 	else
-		ft_sleep(entities.sys->time_to_sleep);
+		ft_sleep(entities->sys->time_to_sleep);
 }
 
 void	*goal_check(void *arg)
@@ -71,7 +71,7 @@ void	*death_check(void *arg)
 		if (actual_time(*(entities->sys)) >= entities->death && *take == false
 															&& g_end == false)
 		{
-			put_msg(*entities, "died\n");
+			put_msg(entities, "died\n");
 			g_end = true;
 		}
 		else
@@ -95,5 +95,5 @@ void	take_fork(int side, t_philosophe *entities)
 	take = true;
 	if (g_end == true)
 		return ;
-	put_msg(*entities, "has take a fork\n");
+	put_msg(entities, "has take a fork\n");
 }
