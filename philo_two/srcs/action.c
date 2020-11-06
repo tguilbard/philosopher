@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/10/28 11:19:33 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/11/06 12:11:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	*death_check(void *arg)
 	entities = ((t_philosophe **)arg)[1];
 	while (*take == false && g_end == false)
 	{
-		if (actual_time(*(entities->sys)) >= entities->death && *take == false
-															&& g_end == false)
+		if (actual_time(*(entities->sys)) >= entities->death &&
+									*take == false && g_end == false)
 		{
 			put_msg(entities, "died\n");
 			g_end = true;
@@ -92,7 +92,6 @@ void	take_fork(t_philosophe *entities)
 	param[1] = entities;
 	take = false;
 	pthread_create(&check, NULL, death_check, (void*)param);
-	pthread_detach(check);
 	while (g_beat % 2 != entities->id % 2 && g_end == false)
 		usleep(1000);
 	sem_wait(entities->sys->sem_fork);
@@ -104,5 +103,6 @@ void	take_fork(t_philosophe *entities)
 	if (g_end == true)
 		return ;
 	put_msg(entities, "has take a fork\n");
+	pthread_join(check, NULL);
 	g_beat = (entities->id % 2) ? 0 : 1;
 }

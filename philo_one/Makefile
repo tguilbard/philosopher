@@ -6,7 +6,7 @@
 #    By: ldutriez <ldutriez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/16 08:17:15 by ldutriez          #+#    #+#              #
-#    Updated: 2020/05/17 12:17:09 by tguilbar         ###   ########.fr        #
+#    Updated: 2020/11/02 14:14:47 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ NORMAL_OBJ = $(OBJ) #$(addprefix $(OBJ_DIR)/, $(NORMAL_SRC:%.c=%.o))
 #BONUS_OBJ = $(OBJ) $(addprefix $(OBJ_DIR)/, $(BONUS_SRC:%.c=%.o))
 
 #Compilation flag
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread #-fsanitize=address -g3
 
 IFLAGS = $(foreach dir, $(INC_DIR), -I$(dir))
 

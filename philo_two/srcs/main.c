@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/10/28 10:41:05 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/11/06 12:14:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,10 @@ int		init(t_systeme *sys, t_philosophe **entities)
 	sys->sem_fork = sem_open("count_fork", O_CREAT, 777, sys->nb_fork);
 	sem_unlink("secure_output");
 	sys->sem_write = sem_open("secure_output", O_CREAT, 777, 1);
-	if (sys->phil == NULL || sys->sem_fork == SEM_FAILED || sys->sem_write == SEM_FAILED)
+	if (sys->phil == NULL || sys->sem_fork == SEM_FAILED ||
+											sys->sem_write == SEM_FAILED)
 	{
-		free(*entities);
-		free(sys->phil);
-		sem_close(sys->sem_fork);
-		sem_unlink("count_fork");
-		sem_close(sys->sem_fork);
-		sem_unlink("secure_output");
+		destructor(*entities);
 		return (-1);
 	}
 	gettimeofday(&(sys->init_time), NULL);

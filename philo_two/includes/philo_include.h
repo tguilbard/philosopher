@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 10:37:15 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/05/18 10:08:59 by tguilbar         ###   ########.fr       */
+/*   Updated: 2020/11/06 12:17:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdbool.h>
 # include <pthread.h>
 # include <semaphore.h>
-# include <fcntl.h>   
+# include <fcntl.h>
 # include <sys/time.h>
 # include <sys/stat.h>
 # include "systeme.h"

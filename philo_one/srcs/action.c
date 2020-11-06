@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/10/28 11:13:14 by tguilbar         ###   ########.fr       */
+/*   Created: 2020/11/06 11:50:36 by user42            #+#    #+#             */
+/*   Updated: 2020/11/06 12:01:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,10 @@ void	take_fork(int side, t_philosophe *entities)
 	param[1] = entities;
 	take = false;
 	pthread_create(&check, NULL, death_check, (void*)param);
-	pthread_detach(check);
 	pthread_mutex_lock(&entities->sys->mutex_fork[side]);
 	take = true;
 	if (g_end == true)
 		return ;
 	put_msg(entities, "has take a fork\n");
+	pthread_join(check, NULL);
 }
