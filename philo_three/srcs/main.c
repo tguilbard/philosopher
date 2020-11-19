@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:19:02 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/17 14:37:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,17 @@ int		init(t_systeme *sys, t_philosophe *entities, pid_t **pid)
 	sys->sem_goal = sem_open("count_goal", O_CREAT, 777, 0);
 	sem_unlink("secure_output");
 	sys->sem_write = sem_open("secure_output", O_CREAT, 777, 1);
+	sem_unlink("count_orga");
+	sys->sem_count = sem_open("count_orga", O_CREAT, 777, 0);
+	sem_unlink("even");
+	sys->sem_even = sem_open("even", O_CREAT, 777, 0);
+	sem_unlink("uneven");
+	sys->sem_uneven = sem_open("uneven", O_CREAT, 777, (sys->nb_phil / 2) +
+															(sys->nb_phil % 2));
 	if (*pid == NULL || sys->sem_fork == SEM_FAILED ||
 		sys->sem_goal == SEM_FAILED || sys->sem_write == SEM_FAILED)
 	{
-		free(*pid);
-		sem_close(sys->sem_fork);
-		sem_unlink("count_fork");
-		sem_close(sys->sem_goal);
-		sem_unlink("count_goal");
-		sem_close(sys->sem_write);
-		sem_unlink("secure_output");
+		destructor(entities, *pid);
 		return (-1);
 	}
 	gettimeofday(&(sys->init_time), NULL);
@@ -82,22 +83,26 @@ int		main(int ac, char **av)
 {
 	t_philosophe	entities;
 	t_systeme		sys;
-	pid_t			*pid;
+	pthread_t		th;
 	pid_t			ret;
 	int				i;
 
 	if (take_param(ac, av, &sys) == -1)
 		return (-1);
-	if (init(&sys, &entities, &pid) == -1)
+	if (init(&sys, &entities, &sys.pid) == -1)
 		return (-1);
-	lunching_phil(&entities, pid);
-	i = 0;
-	ret = waitpid(-1, NULL, 0);
-	while (i < sys.nb_phil)
+	lunching_phil(&entities, sys.pid);
+	if (0 == pthread_create(&th, NULL, orga, (void *)&entities))
 	{
-		if (ret != pid[i])
-			kill(pid[i], 1);
-		i++;
+		pthread_detach(th);
+		i = 0;
+		ret = waitpid(-1, NULL, 0);
+		while (i < sys.nb_phil)
+		{
+			if (ret != (sys.pid)[i])
+				kill((sys.pid)[i], 1);
+			i++;
+		}
 	}
-	destructor(&entities, pid);
+	destructor(&entities, sys.pid);
 }

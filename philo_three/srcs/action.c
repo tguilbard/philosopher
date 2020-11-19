@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:17:37 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/17 14:57:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ extern bool g_end;
 
 void	eating(t_philosophe *entities)
 {
+	int time;
+
 	put_msg(entities, "is eating\n");
-	usleep(entities->sys->time_to_eat * 1000);
+	time = actual_time(*(entities->sys));
+	entities->death = time + entities->sys->time_to_die;
+	ft_sleep(entities, time + entities->sys->time_to_eat);
 	entities->nb_feeded++;
 	if (entities->nb_feeded == entities->sys->goal)
 		sem_post(entities->sys->sem_goal);
-	entities->death = actual_time(*(entities->sys))
-												+ entities->sys->time_to_die;
 }
 
 void	sleeping(t_philosophe *entities)
@@ -34,12 +36,12 @@ void	sleeping(t_philosophe *entities)
 	put_msg(entities, "is sleeping\n");
 	if (entities->death - time < entities->sys->time_to_sleep)
 	{
-		usleep((entities->death - time) * 1000);
+		ft_sleep(entities, entities->death);
 		put_msg(entities, "died\n");
 		exit(-1);
 	}
 	else
-		usleep(entities->sys->time_to_sleep * 1000);
+		ft_sleep(entities, time + entities->sys->time_to_sleep);
 }
 
 void	*goal_check(void *arg)
@@ -92,6 +94,11 @@ void	take_fork(t_philosophe *entities)
 	g_take = false;
 	pthread_create(&check, NULL, death_check, (void*)entities);
 	pthread_detach(check);
+	if ((entities->id % 2) == 0)
+		sem_wait(entities->sys->sem_even);
+	else
+		sem_wait(entities->sys->sem_uneven);
+	sem_post(entities->sys->sem_count);
 	sem_wait(entities->sys->sem_fork);
 	if (g_end == true)
 		exit(-1);

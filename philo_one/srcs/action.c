@@ -6,26 +6,32 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 11:50:36 by user42            #+#    #+#             */
-/*   Updated: 2020/11/06 12:01:58 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 10:14:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
 extern bool	g_end;
-extern int	g_goal;
+int			g_goal = 0;
 
 void	eating(t_philosophe *entities)
 {
+	int time;
+
 	if (g_end == true)
 		return ;
+	time = actual_time(*(entities->sys));
 	put_msg(entities, "is eating\n");
-	ft_sleep(entities->sys->time_to_eat);
+	entities->death = time + entities->sys->time_to_die;
+	ft_sleep(entities, time + entities->sys->time_to_eat);
 	entities->nb_feeded++;
 	if (entities->nb_feeded == entities->sys->goal)
+	{
+		pthread_mutex_lock(&entities->sys->mutex_goal);
 		g_goal++;
-	entities->death = actual_time(*(entities->sys))
-												+ entities->sys->time_to_die;
+		pthread_mutex_unlock(&entities->sys->mutex_goal);
+	}
 }
 
 void	sleeping(t_philosophe *entities)
@@ -38,12 +44,12 @@ void	sleeping(t_philosophe *entities)
 	put_msg(entities, "is sleeping\n");
 	if (entities->death - time < entities->sys->time_to_sleep)
 	{
-		ft_sleep(entities->death - time);
+		ft_sleep(entities, entities->death);
 		g_end = true;
 		put_msg(entities, "died\n");
 	}
 	else
-		ft_sleep(entities->sys->time_to_sleep);
+		ft_sleep(entities, time + entities->sys->time_to_sleep);
 }
 
 void	*goal_check(void *arg)
@@ -51,7 +57,7 @@ void	*goal_check(void *arg)
 	int nb_phil;
 
 	nb_phil = *(int *)arg;
-	while (g_goal != nb_phil && g_end == false)
+	while (g_goal != nb_phil)
 	{
 		usleep(1000);
 	}

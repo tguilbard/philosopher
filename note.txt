@@ -1,5 +1,6 @@
 finish:
-- philo_three
+- philo_one
 - philo_two
 todo:
-- patch bug philo_one
+- patch philo_three
+rythm

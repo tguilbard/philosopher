@@ -6,7 +6,7 @@
 #    By: ldutriez <ldutriez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/16 08:17:15 by ldutriez          #+#    #+#              #
-#    Updated: 2020/10/27 10:11:14 by tguilbar         ###   ########.fr        #
+#    Updated: 2020/11/17 14:20:22 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ vpath %.c $(foreach dir, $(SRC_DIR), $(dir):)
 LIB =
 #FRAMEWORK = OpenGL Appkit
 
-SRC = action.c atoi.c main.c put_msg.c utilities.c
+SRC = action.c atoi.c main.c put_msg.c utilities.c orga.c
 
 #NORMAL_SRC =
 

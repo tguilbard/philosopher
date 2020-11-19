@@ -6,13 +6,14 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 12:11:16 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:09:47 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/17 14:17:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
 extern bool	g_end;
+extern bool g_beat;
 
 int		actual_time(t_systeme sys)
 {
@@ -25,20 +26,6 @@ int		actual_time(t_systeme sys)
 	return (result);
 }
 
-void	ft_sleep(int time)
-{
-	int i;
-
-	i = time / 1000;
-	while (i > 0 && g_end == false)
-	{
-		usleep(1000 * 1000);
-		i--;
-	}
-	if (g_end == false)
-		usleep((time % 1000) * 1000);
-}
-
 void	destructor(t_philosophe *entities)
 {
 	free(entities->sys->phil);
@@ -47,6 +34,29 @@ void	destructor(t_philosophe *entities)
 	sem_close(entities->sys->sem_write);
 	sem_unlink("secure_output");
 	free(entities);
+}
+
+void	ft_sleep(t_philosophe *entities, int end)
+{
+	while (actual_time(*(entities->sys)) < end)
+		usleep(2);
+}
+
+void	orga(int nb_phil)
+{
+	static int	count = 0;
+
+	count++;
+	if (count == (nb_phil / 2) + (nb_phil % 2) && g_beat == 1)
+	{
+		g_beat = 0;
+		count = 0;
+	}
+	else if (count == nb_phil / 2 && g_beat == 0)
+	{
+		g_beat = 1;
+		count = 0;
+	}
 }
 
 void	lunching_phil(t_philosophe *entities)

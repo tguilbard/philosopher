@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 12:11:16 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:17:49 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/17 14:19:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,27 @@ int		actual_time(t_systeme sys)
 	return (result);
 }
 
+void	ft_sleep(t_philosophe *entities, int end)
+{
+	while (actual_time(*(entities->sys)) < end)
+		usleep(1);
+}
+
 void	destructor(t_philosophe *entities, pid_t *pid)
 {
 	free(pid);
 	sem_close(entities->sys->sem_fork);
 	sem_unlink("count_fork");
+	sem_close(entities->sys->sem_goal);
 	sem_unlink("count_goal");
+	sem_close(entities->sys->sem_write);
+	sem_unlink("secure_output");
+	sem_close(entities->sys->sem_count);
+	sem_unlink("count_orga");
+	sem_close(entities->sys->sem_even);
+	sem_unlink("even");
+	sem_close(entities->sys->sem_uneven);
+	sem_unlink("uneven");
 }
 
 void	lunching_phil(t_philosophe *entities, pid_t *pid)

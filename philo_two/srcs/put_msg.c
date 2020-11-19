@@ -6,11 +6,13 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 10:24:59 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:15:55 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/10 13:13:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
+
+extern bool g_end;
 
 size_t	ft_strlen(char *msg)
 {
@@ -78,10 +80,10 @@ void	put_msg(t_philosophe *entities, char *msg)
 {
 	char *result;
 
+	sem_wait(entities->sys->sem_write);
 	result = ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin(ft_itoa(actual_time(
 				*(entities->sys))), " ", false), ft_itoa(entities->id), true)
 												, " ", false), msg, false);
-	sem_wait(entities->sys->sem_write);
 	write(1, result, ft_strlen(result));
 	sem_post(entities->sys->sem_write);
 	free(result);

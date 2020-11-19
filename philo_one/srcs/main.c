@@ -6,18 +6,19 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:02:59 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 10:17:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
 bool	g_end = false;
-int		g_goal = 0;
 bool	g_beat = 0;
 
 void	choice_fork(int right, int left, t_philosophe *entities)
 {
+	while (g_beat != entities->id % 2 && g_end == false)
+		usleep(1);
 	if (left < right)
 	{
 		take_fork(left, entities);
@@ -32,6 +33,7 @@ void	choice_fork(int right, int left, t_philosophe *entities)
 			return ;
 		take_fork(left, entities);
 	}
+	orga(entities->sys->nb_phil);
 }
 
 void	*philosophe(void *arg)
@@ -87,6 +89,7 @@ int		init(t_systeme *sys, t_philosophe **entities)
 	while (i <= sys->nb_fork)
 		pthread_mutex_init(&(sys->mutex_fork[i++ - 1]), NULL);
 	pthread_mutex_init(&sys->mutex_write, NULL);
+	pthread_mutex_init(&sys->mutex_goal, NULL);
 	gettimeofday(&(sys->init_time), NULL);
 	return (0);
 }

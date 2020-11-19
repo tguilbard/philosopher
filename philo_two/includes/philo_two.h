@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/15 13:45:07 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:16:39 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/17 14:17:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ void	take_fork(t_philosophe *entities);
 void	*goal_check(void *arg);
 void	put_msg(t_philosophe *entities, char *msg);
 int		ft_atoi(char *str);
-void	ft_sleep(int time);
+void	ft_sleep(t_philosophe *entities, int end);
 void	destructor(t_philosophe *entities);
+void	orga(int nb_phil);
 void	lunching_phil(t_philosophe *entities);
 void	*philosophe(void *arg);
 

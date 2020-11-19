@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:14:54 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/10 13:21:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@ void	*philosophe(void *arg)
 	t_philosophe	*entities;
 
 	entities = (t_philosophe*)arg;
-	while (true)
+	while (g_end == false)
 	{
-		if (g_end == true)
-			return (NULL);
 		if (actual_time(*(entities->sys)) >= entities->death)
 		{
 			g_end = true;
@@ -33,8 +31,6 @@ void	*philosophe(void *arg)
 		put_msg(entities, "is thinking\n");
 		take_fork(entities);
 		eating(entities);
-		sem_post(entities->sys->sem_fork);
-		sem_post(entities->sys->sem_fork);
 		sleeping(entities);
 	}
 	return (NULL);

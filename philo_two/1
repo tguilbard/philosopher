@@ -6,14 +6,13 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 12:11:16 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/17 14:13:35 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 13:21:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
-extern bool g_end;
-extern bool g_beat;
+extern bool	g_end;
 
 int		actual_time(t_systeme sys)
 {
@@ -26,17 +25,21 @@ int		actual_time(t_systeme sys)
 	return (result);
 }
 
-void	ft_sleep(t_philosophe *entities, int end)
-{
-	while (actual_time(*(entities->sys)) < end)
-		usleep(1);
-}
-
 void	destructor(t_philosophe *entities)
 {
 	free(entities->sys->phil);
-	free(entities->sys->mutex_fork);
+	sem_close(entities->sys->sem_fork);
+	sem_unlink("count_fork");
+	sem_close(entities->sys->sem_write);
+	sem_unlink("secure_output");
 	free(entities);
+}
+
+void	ft_sleep(t_philosophe *entities, int end)
+{
+	
+	while (actual_time(*(entities->sys)) < end)
+		usleep(10);
 }
 
 void	lunching_phil(t_philosophe *entities)
@@ -57,22 +60,5 @@ void	lunching_phil(t_philosophe *entities)
 		pthread_create(&((sys.phil)[i]), NULL,
 											philosophe, (void*)&(entities[i]));
 		i++;
-	}
-}
-
-void	orga(int nb_phil)
-{
-	static int count = 0;
-
-	count++;
-	if (count == (nb_phil / 2) + (nb_phil % 2) && g_beat == 1)
-	{
-		g_beat = 0;
-		count = 0;
-	}
-	else if (count == nb_phil / 2 && g_beat == 0)
-	{
-		g_beat = 1;
-		count = 0;
 	}
 }
