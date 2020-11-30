@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 10:24:59 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:06:10 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/26 10:02:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	put_msg(t_philosophe *entities, char *msg)
 		false), msg, false);
 	pthread_mutex_lock(&entities->sys->mutex_write);
 	write(1, result, ft_strlen(result));
+	if (msg[0] == 'd')
+		close(1);
 	pthread_mutex_unlock(&entities->sys->mutex_write);
 	free(result);
 }

@@ -6,13 +6,11 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/17 14:37:05 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/30 12:30:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
-
-bool g_end = false;
 
 void	philosophe(t_philosophe *entities)
 {
@@ -51,8 +49,9 @@ int		init(t_systeme *sys, t_philosophe *entities, pid_t **pid)
 	sem_unlink("uneven");
 	sys->sem_uneven = sem_open("uneven", O_CREAT, 777, (sys->nb_phil / 2) +
 															(sys->nb_phil % 2));
-	if (*pid == NULL || sys->sem_fork == SEM_FAILED ||
-		sys->sem_goal == SEM_FAILED || sys->sem_write == SEM_FAILED)
+	if (*pid == NULL || sys->sem_fork == S_FAILED || sys->sem_even == S_FAILED
+		|| sys->sem_goal == S_FAILED || sys->sem_write == S_FAILED ||
+		sys->sem_count == S_FAILED || sys->sem_uneven == S_FAILED)
 	{
 		destructor(entities, *pid);
 		return (-1);
@@ -91,18 +90,17 @@ int		main(int ac, char **av)
 		return (-1);
 	if (init(&sys, &entities, &sys.pid) == -1)
 		return (-1);
+	if (0 != pthread_create(&th, NULL, orga, (void *)&entities))
+		return (-1);
+	pthread_detach(th);
 	lunching_phil(&entities, sys.pid);
-	if (0 == pthread_create(&th, NULL, orga, (void *)&entities))
+	i = 0;
+	ret = waitpid(-1, NULL, 0);
+	while (i < sys.nb_phil)
 	{
-		pthread_detach(th);
-		i = 0;
-		ret = waitpid(-1, NULL, 0);
-		while (i < sys.nb_phil)
-		{
-			if (ret != (sys.pid)[i])
-				kill((sys.pid)[i], 1);
-			i++;
-		}
+		if (ret != (sys.pid)[i])
+			kill((sys.pid)[i], 1);
+		i++;
 	}
 	destructor(&entities, sys.pid);
 }

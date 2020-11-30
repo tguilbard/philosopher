@@ -6,14 +6,13 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/17 14:57:44 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/30 12:27:22 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
 
 bool		g_take = false;
-extern bool g_end;
 
 void	eating(t_philosophe *entities)
 {
@@ -78,8 +77,7 @@ void	*death_check(void *arg)
 		{
 			put_msg(entities, "died\n");
 			sem_post(entities->sys->sem_fork);
-			g_end = true;
-			return (NULL);
+			exit(-1);
 		}
 		else
 			usleep(1000);
@@ -93,19 +91,15 @@ void	take_fork(t_philosophe *entities)
 
 	g_take = false;
 	pthread_create(&check, NULL, death_check, (void*)entities);
-	pthread_detach(check);
 	if ((entities->id % 2) == 0)
 		sem_wait(entities->sys->sem_even);
 	else
 		sem_wait(entities->sys->sem_uneven);
-	sem_post(entities->sys->sem_count);
 	sem_wait(entities->sys->sem_fork);
-	if (g_end == true)
-		exit(-1);
 	put_msg(entities, "has take a fork\n");
 	sem_wait(entities->sys->sem_fork);
-	if (g_end == true)
-		exit(-1);
 	g_take = true;
 	put_msg(entities, "has take a fork\n");
+	sem_post(entities->sys->sem_count);
+	pthread_join(check, NULL);
 }

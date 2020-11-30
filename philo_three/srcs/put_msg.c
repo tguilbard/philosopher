@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 10:24:59 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/06 12:18:43 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/30 12:13:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*ft_strjoin(char *s1, char *s2, bool type)
 
 void	put_msg(t_philosophe *entities, char *msg)
 {
-	char *result;
+	char		*result;
 
 	result = ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin(ft_itoa(actual_time(
 				*(entities->sys))), " ", false), ft_itoa(entities->id), true),

@@ -6,7 +6,7 @@
 /*   By: user42 <tguilbar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 14:19:02 by user42            #+#    #+#             */
-/*   Updated: 2020/11/17 15:21:28 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/30 12:33:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,14 @@ void	fill_sem(sem_t *sem, int i)
 	}
 }
 
+void	init_orga(int *count, bool *beat)
+{
+	*count = 0;
+	*beat = 1;
+}
+
 /*
-**	tab[0] = tab[0]; tab[1] = tab[1]
+**	tab[0] = count; tab[1] = nb_phil
 */
 
 void	*orga(void *arg)
@@ -36,7 +42,7 @@ void	*orga(void *arg)
 
 	entities = (t_philosophe *)arg;
 	tab[1] = entities->sys->nb_phil;
-	beat = 1;
+	init_orga(&tab[0], &beat);
 	while (true)
 	{
 		sem_wait(entities->sys->sem_count);
