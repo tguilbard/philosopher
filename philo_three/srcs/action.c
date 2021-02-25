@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/30 12:27:22 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 12:21:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,21 @@ void	sleeping(t_philosophe *entities)
 
 void	*goal_check(void *arg)
 {
-	t_systeme	*sys;
-	pid_t		*pid;
+	t_systeme	sys;
 	int			i;
 
-	sys = ((t_systeme **)arg)[0];
-	pid = ((pid_t **)arg)[1];
+	sys = ((t_systeme *)arg)[0];
 	i = 0;
-	while (i < sys->nb_phil)
+	while (i < sys.nb_phil)
 	{
-		sem_wait(sys->sem_goal);
+		sem_wait(sys.sem_goal);
 		i++;
 	}
-	i = 0;
-	while (i < sys->nb_phil)
-	{
-		kill(pid[i], 1);
-		i++;
-	}
-	exit(-1);
+	sem_wait(sys.sem_write);
+	write(1, "goal\n", 5);
+	sem_post(sys.sem_write);
+	kill(0, SIGINT);
+	return (NULL);
 }
 
 void	*death_check(void *arg)

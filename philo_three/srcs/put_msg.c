@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 10:24:59 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/30 12:13:17 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 12:23:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	put_msg(t_philosophe *entities, char *msg)
 													" ", false), msg, false);
 	sem_wait(entities->sys->sem_write);
 	write(1, result, ft_strlen(result));
-	sem_post(entities->sys->sem_write);
+	if (msg[0] != 'd')
+		sem_post(entities->sys->sem_write);
 	free(result);
 }

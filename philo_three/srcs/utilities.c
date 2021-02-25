@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 12:11:16 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/17 14:19:55 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 12:18:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,11 @@ void	lunching_phil(t_philosophe *entities, pid_t *pid)
 {
 	t_systeme	sys;
 	pthread_t	check;
-	void		*param[2];
 	int			i;
 
 	sys = *(entities->sys);
-	param[0] = &sys;
-	param[1] = pid;
 	i = 0;
-	pthread_create(&check, NULL, goal_check, (void *)param);
+	pthread_create(&check, NULL, goal_check, (void *)&sys);
 	pthread_detach(check);
 	entities->nb_feeded = 0;
 	entities->death = actual_time(sys) + (entities[i]).sys->time_to_die;
