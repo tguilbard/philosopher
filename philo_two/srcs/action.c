@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/17 14:16:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 13:01:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,20 @@ void	sleeping(t_philosophe *entities)
 
 void	*goal_check(void *arg)
 {
-	int nb_phil;
+	t_systeme	sys;
+	int			nb_phil;
 
-	nb_phil = *(int *)arg;
+	sys = *((t_systeme *)arg);
+	nb_phil = sys.nb_phil;
 	while (g_goal != nb_phil && g_end == false)
 	{
 		usleep(1000);
 	}
 	g_end = true;
+	sem_wait(sys.sem_write);
+	write(1, "goal\n", 5);
+	close(1);
+	sem_post(sys.sem_write);
 	return (NULL);
 }
 

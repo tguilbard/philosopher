@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 11:50:36 by user42            #+#    #+#             */
-/*   Updated: 2020/12/28 15:31:17 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 13:03:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,19 @@ void	sleeping(t_philosophe *entities)
 
 void	*goal_check(void *arg)
 {
-	int nb_phil;
+	t_systeme	sys;
+	int			nb_phil;
 
-	nb_phil = *(int *)arg;
+	sys = *(t_systeme *)arg;
+	nb_phil = sys.nb_phil;
 	while (g_goal != nb_phil)
 	{
 		usleep(1000);
 	}
 	g_end = true;
+	pthread_mutex_lock(&sys.mutex_write);
 	write(1, "goal\n", 5);
+	pthread_mutex_unlock(&sys.mutex_write);
 	return (NULL);
 }
 

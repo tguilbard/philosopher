@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 12:11:16 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/17 14:13:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 12:29:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	lunching_phil(t_philosophe *entities)
 
 	sys = *(entities->sys);
 	i = 0;
-	pthread_create(&check, NULL, goal_check, (void*)&(sys.nb_phil));
+	pthread_create(&check, NULL, goal_check, (void*)&(sys));
 	pthread_detach(check);
 	while (i < sys.nb_phil)
 	{
