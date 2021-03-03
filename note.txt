@@ -2,6 +2,3 @@ finish:
 - philo_one
 - philo_two
 - patch philo_three
-
-to do :
-- check untry val

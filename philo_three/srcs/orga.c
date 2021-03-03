@@ -6,7 +6,7 @@
 /*   By: user42 <tguilbar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 14:19:02 by user42            #+#    #+#             */
-/*   Updated: 2021/03/03 13:10:24 by tguilbar         ###   ########.fr       */
+/*   Updated: 2021/03/03 14:11:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,13 @@ void	*orga(void *arg)
 	{
 		sem_wait(entities->sys->sem_count);
 		tab[0]++;
-		if (tab[1] == 1)
-			fill_sem(entities->sys->sem_uneven, 1);
-		else if (tab[0] == (tab[1] / 2) + (tab[1] % 2) && beat == 1)
+		if (tab[0] == (tab[1] / 2) + (tab[1] % 2) && beat == 1 && tab[1] > 1)
 		{
 			fill_sem(entities->sys->sem_even, tab[1] / 2);
 			beat = 0;
 			tab[0] = 0;
 		}
-		else if (tab[0] == tab[1] / 2 && beat == 0)
+		else if ((tab[0] == tab[1] / 2 && beat == 0) || tab[1] == 1)
 		{
 			fill_sem(entities->sys->sem_uneven, (tab[1] / 2) + (tab[1] % 2));
 			beat = 1;
