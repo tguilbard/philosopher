@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/30 12:30:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/03 13:39:22 by tguilbar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,17 @@ int		take_param(int ac, char **av, t_systeme *sys)
 			sys->goal = ft_atoi(av[5]);
 		else
 			sys->goal = -1;
+		if (sys->nb_phil < 1 || sys->time_to_die < 60 || sys->time_to_eat < 60 || sys->time_to_sleep < 60)
+		{
+			write(2, "Wrong Input\n", 12);
+			return (-1);
+		}
 	}
 	else
+	{
+		write(2, "Wrong Input\n", 12);
 		return (-1);
+	}
 	return (0);
 }
 

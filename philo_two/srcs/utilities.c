@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 12:11:16 by tguilbar          #+#    #+#             */
-/*   Updated: 2021/02/25 13:02:37 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/03 12:56:00 by tguilbar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	orga(int nb_phil)
 	static int	count = 0;
 
 	count++;
-	if (count == (nb_phil / 2) + (nb_phil % 2) && g_beat == 1)
+	if (count == (nb_phil / 2) + (nb_phil % 2) && g_beat == 1 && nb_phil > 1)
 	{
 		g_beat = 0;
 		count = 0;
