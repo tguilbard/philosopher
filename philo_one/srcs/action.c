@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 11:50:36 by user42            #+#    #+#             */
-/*   Updated: 2021/02/25 13:03:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/15 11:19:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	sleeping(t_philosophe *entities)
 	if (entities->death - time < entities->sys->time_to_sleep)
 	{
 		ft_sleep(entities, entities->death);
-		g_end = true;
 		put_msg(entities, "died\n");
+		g_end = true;
 	}
 	else
 		ft_sleep(entities, time + entities->sys->time_to_sleep);
@@ -54,19 +54,21 @@ void	sleeping(t_philosophe *entities)
 
 void	*goal_check(void *arg)
 {
-	t_systeme	sys;
+	t_systeme	*sys;
 	int			nb_phil;
 
-	sys = *(t_systeme *)arg;
-	nb_phil = sys.nb_phil;
-	while (g_goal != nb_phil)
+	sys = (t_systeme *)arg;
+	nb_phil = sys->nb_phil;
+	while (g_goal != nb_phil && g_end == false)
 	{
 		usleep(1000);
 	}
+	if (g_end)
+		return (NULL);
 	g_end = true;
-	pthread_mutex_lock(&sys.mutex_write);
+	pthread_mutex_lock(&sys->mutex_write);
 	write(1, "goal\n", 5);
-	pthread_mutex_unlock(&sys.mutex_write);
+	pthread_mutex_unlock(&sys->mutex_write);
 	return (NULL);
 }
 

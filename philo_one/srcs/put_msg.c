@@ -6,11 +6,13 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 10:24:59 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/26 10:02:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 13:37:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
+
+extern bool g_end;
 
 size_t	ft_strlen(char *msg)
 {
@@ -82,9 +84,8 @@ void	put_msg(t_philosophe *entities, char *msg)
 		*(entities->sys))), " ", false), ft_itoa(entities->id), true), " ",
 		false), msg, false);
 	pthread_mutex_lock(&entities->sys->mutex_write);
-	write(1, result, ft_strlen(result));
-	if (msg[0] == 'd')
-		close(1);
+	if (g_end == false)
+		write(1, result, ft_strlen(result));
 	pthread_mutex_unlock(&entities->sys->mutex_write);
 	free(result);
 }

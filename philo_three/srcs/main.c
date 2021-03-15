@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2021/03/03 14:07:17 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/15 11:52:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	philosophe(t_philosophe *entities)
 		if (actual_time(*(entities->sys)) >= entities->death)
 		{
 			put_msg(entities, "died\n");
+			destructor(entities, NULL);
 			exit(-1);
 		}
 		put_msg(entities, "is thinking\n");
@@ -99,12 +100,14 @@ int		main(int ac, char **av)
 		return (-1);
 	if (init(&sys, &entities, &sys.pid) == -1)
 		return (-1);
+	sys.end = false;
 	if (0 != pthread_create(&th, NULL, orga, (void *)&entities))
 		return (-1);
 	pthread_detach(th);
 	lunching_phil(&entities, sys.pid);
 	i = 0;
 	ret = waitpid(-1, NULL, 0);
+	sys.end = true;
 	while (i < sys.nb_phil)
 	{
 		if (ret != (sys.pid)[i])

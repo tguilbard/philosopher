@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:14:40 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/17 14:34:52 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 13:21:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct	s_systeme
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				goal;
+	bool			end;
 }				t_systeme;
 
 #endif

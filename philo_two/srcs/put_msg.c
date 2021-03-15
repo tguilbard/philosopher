@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 10:24:59 by tguilbar          #+#    #+#             */
-/*   Updated: 2020/11/26 10:03:28 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 08:56:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,8 @@ void	put_msg(t_philosophe *entities, char *msg)
 	result = ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin(ft_itoa(actual_time(
 				*(entities->sys))), " ", false), ft_itoa(entities->id), true)
 												, " ", false), msg, false);
-	write(1, result, ft_strlen(result));
-	if (msg[0] == 'd')
-		close(1);
+	if (g_end == false)
+		write(1, result, ft_strlen(result));
 	sem_post(entities->sys->sem_write);
 	free(result);
 }

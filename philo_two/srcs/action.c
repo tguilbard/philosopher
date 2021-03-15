@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2021/02/25 13:01:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 09:06:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	sleeping(t_philosophe *entities)
 	if (entities->death - time < entities->sys->time_to_sleep)
 	{
 		ft_sleep(entities, entities->death);
-		g_end = true;
 		put_msg(entities, "died\n");
+		g_end = true;
 	}
 	else
 		ft_sleep(entities, time + entities->sys->time_to_sleep);
@@ -62,10 +62,11 @@ void	*goal_check(void *arg)
 	{
 		usleep(1000);
 	}
+	if (g_end)
+		return (NULL);
 	g_end = true;
 	sem_wait(sys.sem_write);
 	write(1, "goal\n", 5);
-	close(1);
 	sem_post(sys.sem_write);
 	return (NULL);
 }
@@ -104,17 +105,16 @@ void	take_fork(t_philosophe *entities)
 	pthread_create(&check, NULL, death_check, (void*)param);
 	while (g_beat != entities->id % 2 && g_end == false)
 		usleep(1);
-	if (g_end == true)
-		return ;
 	sem_wait(entities->sys->sem_fork);
-	if (g_end == true)
-		return ;
 	put_msg(entities, "has take a fork\n");
-	sem_wait(entities->sys->sem_fork);
-	take = true;
-	if (g_end == true)
-		return ;
-	put_msg(entities, "has take a fork\n");
-	orga(entities->sys->nb_phil);
+	if (g_end == false)
+	{
+		sem_wait(entities->sys->sem_fork);
+		put_msg(entities, "has take a fork\n");
+		take = true;
+	}
 	pthread_join(check, NULL);
+	if (g_end == true)
+		return ;
+	orga(entities->sys->nb_phil);
 }

@@ -6,7 +6,7 @@
 /*   By: user42 <tguilbar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 14:19:02 by user42            #+#    #+#             */
-/*   Updated: 2021/03/03 14:11:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 13:22:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	*orga(void *arg)
 	entities = (t_philosophe *)arg;
 	tab[1] = entities->sys->nb_phil;
 	init_orga(&tab[0], &beat);
-	while (true)
+	while (entities->sys->end == false)
 	{
 		sem_wait(entities->sys->sem_count);
 		tab[0]++;

@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 11:22:01 by tguilbar          #+#    #+#             */
-/*   Updated: 2021/02/25 12:21:31 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 13:25:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	sleeping(t_philosophe *entities)
 	{
 		ft_sleep(entities, entities->death);
 		put_msg(entities, "died\n");
+		destructor(entities, NULL);
 		exit(-1);
 	}
 	else
@@ -45,20 +46,24 @@ void	sleeping(t_philosophe *entities)
 
 void	*goal_check(void *arg)
 {
-	t_systeme	sys;
+	t_systeme	*sys;
 	int			i;
 
-	sys = ((t_systeme *)arg)[0];
+	sys = (t_systeme *)arg;
 	i = 0;
-	while (i < sys.nb_phil)
+	while (i < sys->nb_phil && sys->end == false)
 	{
-		sem_wait(sys.sem_goal);
+		sem_wait(sys->sem_goal);
 		i++;
 	}
-	sem_wait(sys.sem_write);
+	if (sys->end)
+		return (NULL);
+	sem_wait(sys->sem_write);
 	write(1, "goal\n", 5);
-	sem_post(sys.sem_write);
-	kill(0, SIGINT);
+	i = 0;
+	while (i < sys->nb_phil)
+		kill((sys->pid)[i++], 1);
+	sem_post(sys->sem_write);
 	return (NULL);
 }
 
@@ -73,6 +78,7 @@ void	*death_check(void *arg)
 		{
 			put_msg(entities, "died\n");
 			sem_post(entities->sys->sem_fork);
+			destructor(entities, NULL);
 			exit(-1);
 		}
 		else

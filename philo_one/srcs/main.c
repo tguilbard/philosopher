@@ -6,7 +6,7 @@
 /*   By: tguilbar <tguilbar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 11:46:27 by tguilbar          #+#    #+#             */
-/*   Updated: 2021/03/03 14:13:42 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/15 11:22:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	*philosophe(void *arg)
 			return (NULL);
 		if (actual_time(*(entities->sys)) >= entities->death)
 		{
-			g_end = true;
 			put_msg(entities, "died\n");
+			g_end = true;
 			return (NULL);
 		}
 		put_msg(entities, "is thinking\n");
